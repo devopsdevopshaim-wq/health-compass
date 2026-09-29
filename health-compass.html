@@ -1,0 +1,739 @@
+<title>מצפן בריאות</title>
+<meta name="description" content="כלי אישי מבוסס-הנחיות לניהול משקל, נפיחות בטנית ובעיות עיכול — איסוף נתונים, תמצית המלצות מרופאים וגופי הנחיות, וניתוח אישי." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Heebo:wght@400;500;700&family=Rubik:wght@400;500;600&display=swap" />
+
+<style>
+  :root {
+    --paper:      #F7F6F3;
+    --surface:    #FFFFFF;
+    --surface-2:  #F1F0EA;
+    --ink:        #1C2321;
+    --ink-soft:   #4A544F;
+    --ink-faint:  #78827C;
+    --line:       #E4E2D9;
+    --line-firm:  #D3D1C6;
+    --accent:     #2F6F5E;
+    --accent-ink: #21503F;
+    --accent-soft:#E7F0EC;
+    --warn:       #A9491F;
+    --warn-soft:  #F6E7DE;
+    --gold:       #B98F3A;
+    --shadow:     0 1px 2px rgba(28,35,33,.04), 0 6px 20px rgba(28,35,33,.06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #14181A;
+      --surface:    #1C221F;
+      --surface-2:  #232B27;
+      --ink:        #ECEAE2;
+      --ink-soft:   #AAB2AC;
+      --ink-faint:  #7E877F;
+      --line:       #2B322E;
+      --line-firm:  #38403A;
+      --accent:     #74BBA1;
+      --accent-ink: #A7D8C6;
+      --accent-soft:#1E2C27;
+      --warn:       #DB8258;
+      --warn-soft:  #2F231D;
+      --gold:       #D6B570;
+      --shadow:     0 1px 2px rgba(0,0,0,.25), 0 8px 26px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:      #14181A;
+    --surface:    #1C221F;
+    --surface-2:  #232B27;
+    --ink:        #ECEAE2;
+    --ink-soft:   #AAB2AC;
+    --ink-faint:  #7E877F;
+    --line:       #2B322E;
+    --line-firm:  #38403A;
+    --accent:     #74BBA1;
+    --accent-ink: #A7D8C6;
+    --accent-soft:#1E2C27;
+    --warn:       #DB8258;
+    --warn-soft:  #2F231D;
+    --gold:       #D6B570;
+    --shadow:     0 1px 2px rgba(0,0,0,.25), 0 8px 26px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    direction: rtl;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 20px 80px; }
+
+  h1, h2, h3 { font-family: "Frank Ruhl Libre", Georgia, "Times New Roman", serif; font-weight: 600; text-wrap: balance; line-height: 1.25; }
+  h1 { font-size: clamp(1.9rem, 1.2rem + 3vw, 2.7rem); margin: 0 0 .3em; letter-spacing: -.01em; }
+  h2 { font-size: 1.5rem; margin: 0 0 .6em; }
+  h3 { font-size: 1.12rem; margin: 1.4em 0 .4em; font-weight: 700; }
+  p { margin: 0 0 1em; }
+  a { color: var(--accent-ink); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+  }
+  .label {
+    font-family: "Rubik", sans-serif; font-size: .74rem; font-weight: 600;
+    letter-spacing: .09em; color: var(--ink-faint); text-transform: uppercase;
+  }
+  .num { font-family: "Rubik", sans-serif; font-variant-numeric: tabular-nums; }
+
+  /* ---- top bar ---- */
+  header.top {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  header.top .row {
+    max-width: 820px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  header.top .mark { display: flex; align-items: center; gap: 8px; font-family: "Frank Ruhl Libre", serif; font-weight: 700; }
+  header.top .mark svg { width: 22px; height: 22px; color: var(--accent); }
+  header.top nav { display: flex; gap: 4px; margin-inline-start: auto; flex-wrap: wrap; }
+  header.top nav a {
+    font-family: "Rubik", sans-serif; font-size: .82rem; text-decoration: none;
+    color: var(--ink-soft); padding: 5px 10px; border-radius: 999px;
+  }
+  header.top nav a:hover { background: var(--surface-2); color: var(--ink); }
+  .theme-btn {
+    background: none; border: 1px solid var(--line-firm); color: var(--ink-soft);
+    width: 32px; height: 32px; border-radius: 999px; cursor: pointer; font-size: .95rem;
+    display: grid; place-items: center;
+  }
+
+  /* ---- hero ---- */
+  .hero { padding: 46px 0 8px; }
+  .hero .kicker { color: var(--accent-ink); font-weight: 600; font-family: "Rubik", sans-serif; font-size: .85rem; letter-spacing: .06em; }
+  .hero p.lead { font-size: 1.12rem; color: var(--ink-soft); max-width: 60ch; }
+
+  .disclaimer {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--line));
+    border-radius: 12px; padding: 14px 16px; margin: 18px 0 8px; font-size: .92rem;
+  }
+  .disclaimer svg { flex: none; width: 20px; height: 20px; color: var(--warn); margin-top: 2px; }
+  .disclaimer strong { color: var(--warn); }
+
+  section.block { margin-top: 40px; scroll-margin-top: 72px; }
+  section.block > .head { display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid var(--line-firm); padding-bottom: 6px; margin-bottom: 6px; }
+  section.block > .head .step { font-family: "Rubik", sans-serif; font-weight: 600; color: var(--accent); font-size: .9rem; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px; box-shadow: var(--shadow);
+  }
+
+  /* ---- red flag screener ---- */
+  .flags .grid { display: grid; gap: 8px; margin: 6px 0 2px; }
+  @media (min-width: 620px) { .flags .grid { grid-template-columns: 1fr 1fr; } }
+  .chk {
+    display: flex; gap: 10px; align-items: flex-start; padding: 9px 11px;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px;
+    font-size: .93rem; cursor: pointer;
+  }
+  .chk input { margin-top: 3px; accent-color: var(--warn); flex: none; width: 16px; height: 16px; }
+  .flag-result {
+    margin-top: 12px; padding: 14px 16px; border-radius: 12px; font-size: .95rem;
+    border: 1px solid var(--line-firm); background: var(--surface-2); color: var(--ink-soft);
+  }
+  .flag-result.alarm {
+    background: var(--warn-soft); border-color: var(--warn);
+    color: var(--ink); font-weight: 500;
+  }
+  .flag-result.alarm strong { color: var(--warn); }
+
+  /* ---- intake form ---- */
+  form .fields { display: grid; gap: 16px 18px; }
+  @media (min-width: 620px) { form .fields.two { grid-template-columns: 1fr 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field > span.q { font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
+  input[type="text"], input[type="number"], textarea, select {
+    font: inherit; color: var(--ink); background: var(--surface-2);
+    border: 1px solid var(--line-firm); border-radius: 9px; padding: 9px 11px; width: 100%;
+  }
+  textarea { resize: vertical; min-height: 62px; }
+  fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 0; }
+  fieldset legend { font-size: .85rem; font-weight: 600; color: var(--ink-soft); padding: 0 6px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 7px; }
+  .checks label {
+    display: inline-flex; gap: 7px; align-items: center; font-size: .9rem;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer;
+  }
+  .checks input { accent-color: var(--accent); }
+
+  .bmi-out { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 4px; }
+  .bmi-out .stat { display: flex; flex-direction: column; }
+  .bmi-out .stat b { font-family: "Rubik", sans-serif; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .bmi-out .stat span { font-size: .78rem; color: var(--ink-faint); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  button.btn {
+    font: inherit; font-family: "Rubik", sans-serif; font-weight: 500;
+    border-radius: 10px; padding: 10px 18px; cursor: pointer; border: 1px solid transparent;
+  }
+  button.btn.primary { background: var(--accent); color: #fff; }
+  :root[data-theme="dark"] button.btn.primary,
+  :root:not([data-theme="light"]) button.btn.primary { color: #10201B; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.btn.primary { color: #10201B; } }
+  button.btn.primary:hover { background: var(--accent-ink); }
+  button.btn.ghost { background: var(--surface); border-color: var(--line-firm); color: var(--ink-soft); }
+  button.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+  button.btn:disabled { opacity: .55; cursor: default; }
+
+  /* ---- knowledge base ---- */
+  .kb h3:first-child { margin-top: .2em; }
+  table.kb-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 8px 0 4px; }
+  .kb-scroll { overflow-x: auto; }
+  table.kb-table th, table.kb-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.kb-table th { font-family: "Rubik", sans-serif; font-size: .78rem; letter-spacing: .04em; color: var(--ink-faint); font-weight: 600; }
+  table.kb-table tr:last-child td { border-bottom: none; }
+  .avg-box {
+    border-inline-start: 3px solid var(--accent); background: var(--accent-soft);
+    border-radius: 0 10px 10px 0; padding: 12px 15px; margin: 14px 0; font-size: .95rem;
+  }
+  .avg-box .label { color: var(--accent-ink); }
+  ul.tight { margin: .3em 0 1em; padding-inline-start: 1.2em; }
+  ul.tight li { margin: .3em 0; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+  .pill { font-family: "Rubik", sans-serif; font-size: .78rem; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--ink-soft); }
+
+  /* ---- personal analysis ---- */
+  .analysis-out {
+    margin-top: 14px; white-space: pre-wrap; font-size: .96rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; box-shadow: var(--shadow);
+  }
+  .analysis-out.empty { color: var(--ink-faint); font-style: italic; box-shadow: none; background: var(--surface-2); }
+  .thinking { display: inline-flex; gap: 6px; align-items: center; color: var(--ink-faint); }
+  .thinking .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 1.2s infinite ease-in-out; }
+  .thinking .dot:nth-child(2){ animation-delay: .2s } .thinking .dot:nth-child(3){ animation-delay: .4s }
+  @keyframes pulse { 0%,80%,100%{ opacity:.3 } 40%{ opacity:1 } }
+  @media (prefers-reduced-motion: reduce) { .thinking .dot { animation: none } }
+
+  .sources { font-size: .84rem; color: var(--ink-soft); }
+  .sources li { margin: .35em 0; }
+  footer.foot { margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .82rem; color: var(--ink-faint); }
+</style>
+
+<header class="top">
+  <div class="row">
+    <span class="mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor" stroke="none"/></svg>
+      מצפן בריאות
+    </span>
+    <nav>
+      <a href="#screener">דגלים אדומים</a>
+      <a href="#intake">איסוף נתונים</a>
+      <a href="#knowledge">המלצות</a>
+      <a href="#analysis">ניתוח אישי</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" aria-label="החלפת מצב תצוגה">◐</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">כלי אישי · מבוסס הנחיות רפואיות</div>
+    <h1>ניהול משקל, נפיחות ובעיות עיכול — במקום אחד</h1>
+    <p class="lead">
+      ממלאים תמונת מצב אישית, מקבלים תמצית מרוכזת של מה שממליצים גופי הנחיות ורופאים מובילים
+      (תזונה, פעילות גופנית, טיפול בנפיחות ועוד), ואז ניתוח אישי שמתאים את ההמלצה לנתונים שלכם.
+    </p>
+    <div class="disclaimer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <div>
+        <strong>זה אינו ייעוץ רפואי ואינו מחליף רופא.</strong>
+        הכלי מרכז מידע ציבורי מהנחיות מקצועיות ומנתח אותו לפי מה שהזנתם. אבחון, מרשמים, בדיקות דם
+        והתאמת טיפול — רק דרך רופא/ה. אם סימנתם דגל אדום בהמשך, פנו לרופא/ה לפני שמתחילים דיאטה או תוכנית עצמאית.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RED FLAG SCREENER ============ -->
+  <section class="block flags" id="screener">
+    <div class="head"><span class="step">שלב 0</span><h2>סינון דגלים אדומים</h2></div>
+    <p style="color:var(--ink-soft);font-size:.95rem">סמנו כל דבר שקיים כרגע. אלה סימנים שמחייבים בירור רפואי לפני תוכנית עצמאית.</p>
+    <div class="card">
+      <div class="grid" id="flagGrid">
+        <!-- filled by JS -->
+      </div>
+      <div class="flag-result" id="flagResult">לא סומנו דגלים אדומים. אפשר להמשיך לאיסוף הנתונים.</div>
+    </div>
+  </section>
+
+  <!-- ============ INTAKE ============ -->
+  <section class="block" id="intake">
+    <div class="head"><span class="step">שלב 1</span><h2>איסוף נתונים</h2></div>
+    <p style="color:var(--ink-soft);font-size:.95rem">הנתונים נשמרים רק בדפדפן שלכם. ככל שתמלאו יותר, הניתוח האישי מדויק יותר.</p>
+    <form id="intakeForm" class="card">
+      <fieldset>
+        <legend>נתוני בסיס</legend>
+        <div class="fields two">
+          <label class="field"><span class="q">גיל</span><input type="number" id="age" min="12" max="110" inputmode="numeric" /></label>
+          <label class="field"><span class="q">מין ביולוגי</span>
+            <select id="sex"><option value="">—</option><option value="female">נקבה</option><option value="male">זכר</option></select>
+          </label>
+          <label class="field"><span class="q">גובה (ס"מ)</span><input type="number" id="height" min="120" max="220" inputmode="numeric" /></label>
+          <label class="field"><span class="q">משקל (ק"ג)</span><input type="number" id="weight" min="35" max="300" inputmode="decimal" /></label>
+          <label class="field"><span class="q">היקף מותן (ס"מ)</span><input type="number" id="waist" min="50" max="200" inputmode="numeric" /></label>
+          <label class="field"><span class="q">משקל יעד (ק"ג, לא חובה)</span><input type="number" id="goalWeight" min="35" max="300" inputmode="decimal" /></label>
+        </div>
+        <div class="bmi-out" id="bmiOut" hidden>
+          <div class="stat"><b id="bmiVal" class="num">—</b><span>BMI</span></div>
+          <div class="stat"><b id="bmiClass">—</b><span>סיווג</span></div>
+          <div class="stat"><b id="waistRisk">—</b><span>היקף מותן</span></div>
+        </div>
+      </fieldset>
+
+      <fieldset style="margin-top:16px">
+        <legend>מה מטריד</legend>
+        <div class="checks" id="concernChecks"></div>
+        <label class="field" style="margin-top:10px"><span class="q">תיאור חופשי — מתי מתחיל, מה מחמיר, מה מקל</span>
+          <textarea id="concernText" placeholder="לדוגמה: נפיחות בבטן שמתגברת בערב ואחרי ארוחות עתירות פחמימות; עלייה של 8 ק״ג בשנתיים..."></textarea>
+        </label>
+        <div class="fields two" style="margin-top:10px">
+          <label class="field"><span class="q">משך הבעיה</span>
+            <select id="duration"><option value="">—</option><option>עד חודש</option><option>1–6 חודשים</option><option>6–12 חודשים</option><option>מעל שנה</option></select>
+          </label>
+          <label class="field"><span class="q">דפוס</span>
+            <select id="pattern"><option value="">—</option><option>קבוע לאורך היום</option><option>בעיקר אחרי ארוחות</option><option>מחמיר בערב</option><option>מחזורי / לפני מחזור</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset style="margin-top:16px">
+        <legend>רקע רפואי</legend>
+        <div class="checks" id="conditionChecks"></div>
+        <label class="field" style="margin-top:10px"><span class="q">תרופות קבועות ותוספים</span><input type="text" id="meds" placeholder="שם התרופה + מינון אם ידוע" /></label>
+        <label class="field" style="margin-top:10px"><span class="q">אבחנות / ניתוחים / רגישויות ידועות</span><input type="text" id="history" placeholder="לדוגמה: תת-פעילות בלוטת התריס, כריתת כיס מרה, אי-סבילות ללקטוז" /></label>
+      </fieldset>
+
+      <fieldset style="margin-top:16px">
+        <legend>תזונה ואורח חיים כיום</legend>
+        <div class="fields two">
+          <label class="field"><span class="q">ארוחות ביום</span><input type="number" id="meals" min="1" max="8" inputmode="numeric" /></label>
+          <label class="field"><span class="q">חלון אכילה (שעות, לא חובה)</span><input type="text" id="window" placeholder="למשל 08:00–21:00" /></label>
+          <label class="field"><span class="q">מזון אולטרה-מעובד ביום</span>
+            <select id="upf"><option value="">—</option><option>כמעט לא</option><option>פעם-פעמיים</option><option>הרבה / רוב הארוחות</option></select>
+          </label>
+          <label class="field"><span class="q">משקאות ממותקים / אלכוהול</span>
+            <select id="drinks"><option value="">—</option><option>אין</option><option>מדי פעם</option><option>יומי</option></select>
+          </label>
+          <label class="field"><span class="q">שינה (שעות בלילה)</span><input type="number" id="sleep" min="3" max="12" step="0.5" inputmode="decimal" /></label>
+          <label class="field"><span class="q">רמת מתח יומיומית</span>
+            <select id="stress"><option value="">—</option><option>נמוכה</option><option>בינונית</option><option>גבוהה</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset style="margin-top:16px">
+        <legend>פעילות גופנית כיום</legend>
+        <div class="fields two">
+          <label class="field"><span class="q">דקות פעילות אירובית בשבוע</span><input type="number" id="aerobic" min="0" max="1500" inputmode="numeric" /></label>
+          <label class="field"><span class="q">ימי אימון כוח בשבוע</span><input type="number" id="strength" min="0" max="7" inputmode="numeric" /></label>
+          <label class="field"><span class="q">צעדים ביום (משוער)</span><input type="number" id="steps" min="0" max="40000" inputmode="numeric" /></label>
+          <label class="field"><span class="q">מגבלות תנועה / כאב</span><input type="text" id="limits" placeholder="למשל כאב ברך, הריון, החלמה מניתוח" /></label>
+        </div>
+      </fieldset>
+
+      <fieldset style="margin-top:16px">
+        <legend>מטרות</legend>
+        <label class="field"><span class="q">מה הכי חשוב לכם להשיג</span>
+          <textarea id="goals" placeholder="לדוגמה: לרדת 10 ק״ג בחצי שנה בלי דיאטת קיצון, ולהפחית נפיחות אחרי ארוחות"></textarea>
+        </label>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" class="btn ghost" id="saveBtn">שמירת טיוטה</button>
+        <button type="button" class="btn ghost" id="clearBtn">איפוס</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ KNOWLEDGE BASE ============ -->
+  <section class="block kb" id="knowledge">
+    <div class="head"><span class="step">שלב 2</span><h2>מה ממליצים — תמצית מרוכזת</h2></div>
+    <p style="color:var(--ink-soft);font-size:.95rem">
+      סיכום של קווי ההמלצה המשותפים לגופים מובילים (ACP, OMA/ACOFP, ADA, NICE, ESNM/UEG, AGA, Monash, ACSM, AHA/CDC, Mayo Clinic, NHS, Harvard).
+      עודכן ב-3 בספטמבר 2026.
+    </p>
+
+    <div class="card">
+      <h3>תזונה לירידה במשקל</h3>
+      <p style="font-size:.95rem">
+        אין דיאטה אחת "מנצחת". בכל ההשוואות ארוכות-הטווח, מה שקובע את התוצאה הוא <strong>גירעון קלורי שאפשר להתמיד בו</strong> —
+        לרוב כ-500 קק"ל ביום, שמובילים לירידה של כ-0.5 ק"ג בשבוע. ההבדלים בין השיטות קטנים יחסית לחשיבות ההיצמדות.
+      </p>
+      <div class="kb-scroll">
+      <table class="kb-table">
+        <thead><tr><th>גישה</th><th>עיקרון</th><th>מה העדויות מראות</th></tr></thead>
+        <tbody>
+          <tr><td>ים-תיכונית</td><td>ירקות, קטניות, דגים, שמן זית, דגנים מלאים; מיעוט בשר אדום ומעובד</td><td>ירידה מתונה ויציבה; היתרון הקרדיו-מטבולי החזק ביותר; קלה להתמדה</td></tr>
+          <tr><td>דלת פחמימות / מתונה-נמוכה</td><td>צמצום סוכר, קמח לבן ופחמימות מזוקקות; יותר חלבון ושומן</td><td>לרוב ירידה מעט גדולה יותר בטווח הקצר; שיפור בטריגליצרידים ו-HDL</td></tr>
+          <tr><td>DASH</td><td>דל נתרן, עשיר בירקות/פירות ומוצרי חלב דלי שומן</td><td>הורדת לחץ דם; ירידה במשקל דומה לים-תיכונית</td></tr>
+          <tr><td>אכילה בחלון זמן / צום לסירוגין</td><td>אכילה בחלון של 8–12 שעות ביום</td><td>ירידה דומה לשיטות אחרות; יתרון של פשטות ופחות ספירת קלוריות</td></tr>
+          <tr><td>קיטו / צום יום-כן-יום</td><td>הגבלה חדה של פחמימות או של ימי אכילה</td><td>ירידה מהירה יותר בהתחלה, אך התמדה ותופעות לוואי מגבילות לטווח ארוך</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="avg-box">
+        <div class="label">הממוצע המעשי בין הרופאים</div>
+        בסיס <strong>ים-תיכוני</strong> · לחתוך קודם כול <strong>סוכר, משקאות ממותקים, אלכוהול ופחמימות מזוקקות</strong> ·
+        <strong>חלבון</strong> ~1.2–1.6 ג' לכל ק"ג משקל ביום כדי לשמור על מסת שריר ולהשביע ·
+        <strong>סיבים</strong> 25–30+ ג' ביום · גירעון של ~500 קק"ל ·
+        אופציונלי: לקבע <strong>חלון אכילה</strong> של 10–12 שעות. לבחור את הווריאציה שאפשר לחיות איתה שנה.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>פעילות גופנית</h3>
+      <div class="pill-row">
+        <span class="pill">בריאות כללית: 150–300 דק'/שבוע אירובי מתון</span>
+        <span class="pill">ירידה במשקל: 225–300+ דק'/שבוע</span>
+        <span class="pill">כוח: 2+ ימים/שבוע</span>
+        <span class="pill">שימור משקל: ~200–300 דק'/שבוע</span>
+      </div>
+      <ul class="tight">
+        <li><strong>אירובי:</strong> להתחיל מהמצב הנוכחי ולעלות בהדרגה ~10% בשבוע עד 150 דק' לבריאות, ומעל 225 דק' כשהמטרה היא ירידה משמעותית. הליכה נמרצת נחשבת.</li>
+        <li><strong>אימוני כוח:</strong> לפחות פעמיים בשבוע, כל קבוצות השרירים, ~2–3 סטים של 8–15 חזרות. שומר על שריר ועצם בזמן ירידה במשקל ומעלה חילוף חומרים במנוחה.</li>
+        <li><strong>אורח חיים:</strong> להפחית ישיבה ממושכת, לכוון ל-7,000–10,000 צעדים ביום, והליכה של 10–15 דק' אחרי ארוחות משפרת סוכר ומפחיתה גזים.</li>
+        <li><strong>שילוב:</strong> אירובי + כוח יחד עדיפים על כל אחד לבד גם לירידה במשקל וגם לבריאות מטבולית.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>נפיחות בטנית וגזים</h3>
+      <p style="font-size:.95rem">
+        רוב הנפיחות הכרונית היא <strong>תפקודית</strong> (נפיחות תפקודית או תסמונת המעי הרגיז) — נובעת מרגישות-יתר של המעי, חוסר תיאום בין הסרעפת לדופן הבטן, תנועתיות איטית ותסיסת חיידקים שמייצרת גז. עדיין חשוב לשלול סיבות אחרות.
+      </p>
+      <ul class="tight">
+        <li><strong>קו ראשון — תזונה:</strong> דיאטת <strong>FODMAP נמוך</strong> ב-3 שלבים (הגבלה 2–6 שבועות → החזרה מבוקרת → התאמה אישית), רצוי בליווי דיאטן/ית. 3 מתוך 4 אנשים עם מעי רגיז משתפרים; 50–80% מגיבים.</li>
+        <li><strong>הרגלים:</strong> ארוחות בזמנים קבועים ולא גדולות מדי, פחות מזון מטוגן ושומני, להפחית משקאות מוגזים, מסטיק, שתייה בקש; אם תוספת סיבים מחמירה — להוריד זמנית.</li>
+        <li><strong>אי-סבילות:</strong> לשקול ניסיון של הפחתת לקטוז ו/או פרוקטוז למשך שבועיים.</li>
+        <li><strong>תוספים:</strong> פרוביוטיקה — ניסיון של 4 שבועות (תלוי זן); שמן מנטה בכמוסות — לכאב ונפיחות במעי רגיז.</li>
+        <li><strong>עצירות נלווית:</strong> לטפל בעצירות עצמה — משפר נפיחות משמעותית.</li>
+        <li><strong>עמיד לטיפול:</strong> טיפולים מכווני מוח-מעי (CBT, היפנוזה מכוונת-מעי) ונוירומודולטורים במינון נמוך.</li>
+        <li><strong>לשלול אצל רופא:</strong> צליאק, מחלת מעי דלקתית, SIBO, אי-ספיקת לבלב, חסימה, ובנשים — גם הערכה גינקולוגית כשיש נפיחות מהירה ומתמשכת.</li>
+      </ul>
+      <p style="font-size:.92rem;color:var(--ink-soft)">
+        <strong>"אצירת נוזלים" אמיתית (בצקת)</strong> שונה מנפיחות של גזים — בצקת מתמשכת, אסימטרית או בכפות הרגליים מצריכה בירור לב/כליה/כבד/ורידים ובדיקת תרופות. הפחתת עודף מלח עוזרת לנטייה לאגור נוזלים.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>גורמים וטיפולים נוספים</h3>
+      <ul class="tight">
+        <li><strong>שינה:</strong> 7–9 שעות. מיעוט שינה מגביר תיאבון ועלייה במשקל.</li>
+        <li><strong>מתח:</strong> מתח כרוני וקורטיזול מזינים אכילה רגשית — תרגול הרפיה, פעילות, ובמידת הצורך ליווי נפשי.</li>
+        <li><strong>בדיקת תרופות:</strong> תרופות מסוימות גורמות לעלייה במשקל או לבצקת (חלק מנוגדי הדיכאון והפסיכוזה, אינסולין/סולפונילאוריאה, סטרואידים, חלק מחוסמי סידן). לא להפסיק לבד — להתייעץ.</li>
+        <li><strong>בירור סיבה משנית:</strong> תת-פעילות בלוטת התריס, PCOS, דום נשימה בשינה, לעיתים תסמונת קושינג — בדיקות דם והפניה דרך רופא/ה משפחה.</li>
+        <li><strong>תרופות להרזיה:</strong> אגוניסטים ל-GLP-1 (סמגלוטייד, טירזפטייד) הם קו ראשון תרופתי לפי ACP 2025 ל-BMI ≥30, או ≥27 עם מחלה נלווית — <strong>במרשם ובמעקב רופא</strong>, כתוספת לשינוי אורח חיים, לא במקומו.</li>
+        <li><strong>ניתוח בריאטרי / אנדוסקופי:</strong> נשקל ב-BMI ≥40, או ≥35 עם מחלה נלווית.</li>
+      </ul>
+    </div>
+
+    <details class="card" style="margin-top:16px">
+      <summary style="cursor:pointer;font-weight:600;font-family:'Frank Ruhl Libre',serif">מקורות</summary>
+      <ul class="sources" style="margin-top:10px">
+        <li>ACP — Living Clinical Guideline on Pharmacologic Treatment of Overweight and Obesity (2025): <a href="https://www.acponline.org/acp-newsroom/acp-issues-new-living-clinical-guideline-on-using-medications-to-manage-overweight-and-obesity" target="_blank" rel="noopener">acponline.org</a></li>
+        <li>Obesity Medicine Association &amp; ACOFP — Obesity management in primary care, joint clinical perspective (2025): <a href="https://www.sciencedirect.com/science/article/pii/S2667368125000166" target="_blank" rel="noopener">sciencedirect.com</a></li>
+        <li>American Diabetes Association — Standards of Care in Diabetes 2025, ch. 8 (Obesity &amp; Weight Management): <a href="https://diabetesjournals.org/care/article/48/Supplement_1/S167/157555" target="_blank" rel="noopener">diabetesjournals.org</a></li>
+        <li>ESNM/UEG — European Consensus on Functional Bloating and Abdominal Distension (2025): <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ueg2.70098" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
+        <li>AGA — Clinical Practice Update on Belching, Abdominal Bloating, and Distention: <a href="https://www.gastrojournal.org/article/S0016-5085(23)00823-5/fulltext" target="_blank" rel="noopener">gastrojournal.org</a></li>
+        <li>Monash University — Low FODMAP Diet &amp; IBS: <a href="https://www.monashfodmap.com/about-fodmap-and-ibs/" target="_blank" rel="noopener">monashfodmap.com</a></li>
+        <li>NEJM — Weight Loss with a Low-Carbohydrate, Mediterranean, or Low-Fat Diet: <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa0708681" target="_blank" rel="noopener">nejm.org</a></li>
+        <li>ACSM — Physical Activity Guidelines: <a href="https://acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines/" target="_blank" rel="noopener">acsm.org</a> · CDC — Adult Activity: <a href="https://www.cdc.gov/physical-activity-basics/guidelines/adults.html" target="_blank" rel="noopener">cdc.gov</a> · AHA: <a href="https://www.heart.org/en/healthy-living/exercise-and-physical-activity/fitness-basics/aha-recs-for-physical-activity-in-adults" target="_blank" rel="noopener">heart.org</a></li>
+        <li>Mayo Clinic — Exercise for weight loss: <a href="https://www.mayoclinic.org/healthy-lifestyle/weight-loss/in-depth/exercise/art-20050999" target="_blank" rel="noopener">mayoclinic.org</a></li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ============ PERSONAL ANALYSIS ============ -->
+  <section class="block" id="analysis">
+    <div class="head"><span class="step">שלב 3</span><h2>ניתוח אישי</h2></div>
+    <p style="color:var(--ink-soft);font-size:.95rem">
+      לוחצים, וקלוד בונה תוכנית שמתאימה את תמצית ההנחיות שלמעלה לנתונים שהזנתם — תזונה, פעילות שבועית, טיפול בנפיחות, גורמים נוספים ומדדי מעקב.
+      זהו ניתוח מבוסס-הנחיות, <strong>לא חיפוש חי ברשת ולא ייעוץ רפואי</strong>.
+    </p>
+    <div class="actions" style="margin-top:0">
+      <button type="button" class="btn primary" id="analyzeBtn">נתח את המקרה שלי</button>
+      <button type="button" class="btn ghost" id="stopBtn" hidden>עצור</button>
+      <button type="button" class="btn ghost" id="exportBtn" hidden>ייצוא הסיכום</button>
+    </div>
+    <div class="analysis-out empty" id="analysisOut">כאן תופיע התוכנית האישית אחרי שתמלאו נתונים ותלחצו "נתח את המקרה שלי".</div>
+  </section>
+
+  <footer class="foot">
+    מצפן בריאות · תמצית ההמלצות עודכנה 3.9.2026 · המידע כללי ואינו תחליף לאבחון וטיפול רפואי אישי.
+    בחירום רפואי — פנו למד"א 101 או למיון הקרוב.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  try {
+    var savedT = localStorage.getItem("mb_theme");
+    if (savedT) root.setAttribute("data-theme", savedT);
+  } catch (e) {}
+  $("themeBtn").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var isDark = cur === "dark" || (!cur && matchMedia("(prefers-color-scheme: dark)").matches);
+    var next = isDark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("mb_theme", next); } catch (e) {}
+  });
+
+  /* ---------- red flag screener ---------- */
+  var FLAGS = [
+    "ירידה לא-מכוונת במשקל (מעל 5% תוך 6–12 חודשים)",
+    "דם בצואה, צואה שחורה או דימום מהפי הטבעת",
+    "הקאות מתמשכות או קושי / כאב בבליעה",
+    "כאב בטן חמור, מתגבר, או כאב שמעיר משינה",
+    "חום ממושך או הזעות לילה",
+    "אנמיה או עייפות קיצונית חדשה",
+    "שינוי מתמשך בהרגלי היציאות מעל גיל 50, או גוש נמוש בבטן",
+    "נפיחות בטנית מהירה ומתמשכת עם תחושת מלאות מוקדמת",
+    "קוצר נשימה, או בטן קשה ותפוחה שמתפתחת מהר",
+    "היסטוריה משפחתית קרובה של סרטן מעי גס או שחלה"
+  ];
+  var flagGrid = $("flagGrid");
+  FLAGS.forEach(function (t, i) {
+    var l = document.createElement("label");
+    l.className = "chk";
+    l.innerHTML = '<input type="checkbox" data-flag="' + i + '"><span>' + t + "</span>";
+    flagGrid.appendChild(l);
+  });
+  function checkedFlags() {
+    return [].slice.call(document.querySelectorAll('[data-flag]:checked')).map(function (c) { return FLAGS[+c.dataset.flag]; });
+  }
+  function updateFlags() {
+    var f = checkedFlags();
+    var el = $("flagResult");
+    if (f.length) {
+      el.className = "flag-result alarm";
+      el.innerHTML = "<strong>סימנת " + f.length + " סימן/ים שמצריכים בירור רפואי.</strong> מומלץ לפנות לרופא/ה משפחה (או למיון אם הסימן חריף) לפני התחלת דיאטה או תוכנית עצמאית. אפשר עדיין למלא נתונים ולקבל תמצית — אך הבירור קודם.";
+    } else {
+      el.className = "flag-result";
+      el.textContent = "לא סומנו דגלים אדומים. אפשר להמשיך לאיסוף הנתונים.";
+    }
+  }
+  flagGrid.addEventListener("change", updateFlags);
+
+  /* ---------- concern / condition chips ---------- */
+  var CONCERNS = ["עלייה במשקל", "קושי לרדת במשקל", "נפיחות בבטן", "גזים", "אצירת נוזלים / בצקת", "תחושת מלאות אחרי אוכל", "עצירות", "שלשולים", "צרבת / ריפלוקס", "אכילה רגשית / התקפי אכילה", "עייפות אחרי ארוחות", "כאבי בטן"];
+  var CONDITIONS = ["סוכרת / טרום-סוכרת", "תת-פעילות בלוטת התריס", "PCOS", "יתר לחץ דם", "כולסטרול גבוה", "כבד שומני", "מעי רגיז (IBS)", "צליאק / רגישות לגלוטן", "אי-סבילות ללקטוז", "דום נשימה בשינה", "אין"];
+  function fillChips(host, arr, name) {
+    arr.forEach(function (t) {
+      var l = document.createElement("label");
+      l.innerHTML = '<input type="checkbox" name="' + name + '" value="' + t + '">' + t;
+      host.appendChild(l);
+    });
+  }
+  fillChips($("concernChecks"), CONCERNS, "concern");
+  fillChips($("conditionChecks"), CONDITIONS, "condition");
+
+  /* ---------- BMI ---------- */
+  var BMI_FIELDS = ["height", "weight", "waist", "sex"];
+  function calcBMI() {
+    var h = parseFloat($("height").value), w = parseFloat($("weight").value);
+    var out = $("bmiOut");
+    if (!h || !w || h < 100 || w < 20) { out.hidden = true; return; }
+    var bmi = w / Math.pow(h / 100, 2);
+    $("bmiVal").textContent = bmi.toFixed(1);
+    var cls = bmi < 18.5 ? "תת-משקל" : bmi < 25 ? "תקין" : bmi < 30 ? "עודף משקל"
+      : bmi < 35 ? "השמנה דרגה 1" : bmi < 40 ? "השמנה דרגה 2" : "השמנה דרגה 3";
+    $("bmiClass").textContent = cls;
+    var waist = parseFloat($("waist").value), sex = $("sex").value, wr = "—";
+    if (waist && sex) {
+      var hi = sex === "male" ? 102 : 88, mid = sex === "male" ? 94 : 80;
+      wr = waist >= hi ? "סיכון גבוה" : waist >= mid ? "סיכון מוגבר" : "תקין";
+    }
+    $("waistRisk").textContent = wr;
+    out.hidden = false;
+  }
+  BMI_FIELDS.forEach(function (id) { $(id).addEventListener("input", calcBMI); });
+
+  /* ---------- persistence ---------- */
+  var TEXT_IDS = ["age", "sex", "height", "weight", "waist", "goalWeight", "concernText", "duration", "pattern",
+    "meds", "history", "meals", "window", "upf", "drinks", "sleep", "stress", "aerobic", "strength", "steps", "limits", "goals"];
+  var KEY = "mb_intake_v1";
+  function collect() {
+    var d = {};
+    TEXT_IDS.forEach(function (id) { d[id] = $(id).value.trim(); });
+    d.concern = [].slice.call(document.querySelectorAll('input[name="concern"]:checked')).map(function (c) { return c.value; });
+    d.condition = [].slice.call(document.querySelectorAll('input[name="condition"]:checked')).map(function (c) { return c.value; });
+    d.flags = checkedFlags();
+    return d;
+  }
+  function restore(d) {
+    if (!d) return;
+    TEXT_IDS.forEach(function (id) { if (d[id] != null) $(id).value = d[id]; });
+    (d.concern || []).forEach(function (v) { var c = document.querySelector('input[name="concern"][value="' + v + '"]'); if (c) c.checked = true; });
+    (d.condition || []).forEach(function (v) { var c = document.querySelector('input[name="condition"][value="' + v + '"]'); if (c) c.checked = true; });
+    calcBMI();
+  }
+  function save(silent) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(collect()));
+      if (!silent) { var b = $("saveBtn"); var o = b.textContent; b.textContent = "נשמר ✓"; setTimeout(function () { b.textContent = o; }, 1500); }
+    } catch (e) {}
+  }
+  try { restore(JSON.parse(localStorage.getItem(KEY) || "null")); } catch (e) {}
+  updateFlags();
+  $("intakeForm").addEventListener("input", function () { save(true); });
+  $("saveBtn").addEventListener("click", function () { save(false); });
+  $("clearBtn").addEventListener("click", function () {
+    if (!confirm("לאפס את כל הנתונים שהוזנו?")) return;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    location.reload();
+  });
+
+  /* ---------- knowledge summary passed to the model ---------- */
+  var KB_SUMMARY = [
+    "תזונה: הגורם המכריע הוא גירעון קלורי בר-התמדה (~500 קק\"ל/יום, ~0.5 ק\"ג/שבוע). אין עדיפות מובהקת למאקרו מסוים. בסיס ים-תיכוני; להפחית קודם סוכר, משקאות ממותקים, אלכוהול ופחמימות מזוקקות; חלבון 1.2-1.6 ג'/ק\"ג/יום; סיבים 25-30+ ג'/יום; אפשר חלון אכילה 10-12 שעות. דלת פחמימות = ירידה מעט גדולה בטווח קצר ושיפור שומני דם. DASH ללחץ דם. קיטו/ADF - ירידה מהירה אך התמדה נמוכה.",
+    "פעילות: בריאות כללית 150-300 דק'/שבוע אירובי מתון + 2+ ימי כוח לכל קבוצות השריר. לירידה משמעותית במשקל 225-300+ דק'/שבוע; לשימור ~200-300. עלייה הדרגתית ~10%/שבוע. כוח שומר שריר ועצם בזמן ירידה. 7,000-10,000 צעדים/יום; הליכה 10-15 דק' אחרי ארוחה.",
+    "נפיחות: רוב הכרונית תפקודית (נפיחות תפקודית/IBS). קו ראשון: FODMAP נמוך ב-3 שלבים בליווי דיאטן/ית (3 מ-4 משתפרים). ארוחות קבועות ולא גדולות, פחות מוגז/מסטיק/קש, טיפול בעצירות (משפר מאוד), ניסיון הפחתת לקטוז/פרוקטוז שבועיים, פרוביוטיקה 4 שבועות, שמן מנטה, הליכה אחרי ארוחה. לשלול צליאק/IBD/SIBO/אי-ספיקת לבלב/חסימה, ובנשים גם הערכה גינקולוגית בנפיחות מהירה ומתמשכת. בצקת אמיתית (רגליים/אסימטרית) - בירור לב/כליה/כבד/ורידים ותרופות; להפחית מלח.",
+    "נוסף: שינה 7-9 ש'; ניהול מתח; לבדוק תרופות שמעלות משקל/בצקת; לברר תת-תריסיות/PCOS/דום נשימה. תרופתי: GLP-1 (סמגלוטייד/טירזפטייד) קו ראשון ל-BMI>=30 או >=27 עם מחלה נלווית - במרשם ובמעקב, כתוספת לאורח חיים. בריאטרי ב-BMI>=40 או >=35 עם מחלה נלווית."
+  ].join("\n\n");
+
+  function buildPrompt(d) {
+    var lines = [];
+    lines.push("אתה עוזר בריאות שמנסח תוכנית מבוססת-הנחיות בעברית. אינך רופא, אינך מאבחן ואינך רושם תרופות. אל תמציא מספרים על המשתמש שלא נמסרו.");
+    lines.push("");
+    lines.push("להלן נתוני המשתמש ולאחריהם תמצית ההנחיות. כתוב תוכנית אישית קונקרטית ומספרית, בעברית, במבנה הבא עם כותרות מודגשות (**):");
+    lines.push("1. תמונת מצב — BMI, סיווג, היקף מותן, והגורמים הבולטים שעולים מהנתונים.");
+    lines.push("2. דגלים אדומים — אם המשתמש סימן, ציין זאת ראשון והמלץ לפנות לרופא/ה לפני תוכנית עצמאית; פרט אילו.");
+    lines.push("3. תזונה — יעד קלורי משוער לגירעון ~500, חלוקת מאקרו, מה להפחית קודם, ודוגמת יום אחת מלאה.");
+    lines.push("4. פעילות גופנית — תוכנית ל-4 שבועות ראשונים: דקות אירובי/שבוע, ימי כוח ותרגילים, יעד צעדים; התאמה למגבלות שנמסרו.");
+    lines.push("5. נפיחות ועיכול — צעדים לפי הסימפטומים שסומנו בלבד; אם רלוונטי, פרט את שלבי ה-FODMAP.");
+    lines.push("6. גורמים נוספים — שינה, מתח, אלכוהול, בדיקת תרופות; מתי לשקול בדיקות דם, הפניה למומחה, או תרופות מרשם.");
+    lines.push("7. מעקב — 4-8 שבועות: מה למדוד ואילו יעדים.");
+    lines.push("8. סייג קצר: זו אינה המלצה רפואית.");
+    lines.push("אורך: עד ~650 מילים. אם חסרים נתונים חשובים, ציין זאת בקצרה במקום המתאים.");
+    lines.push("");
+    lines.push("=== נתוני המשתמש ===");
+    var map = {
+      age: "גיל", sex: "מין", height: "גובה ס\"מ", weight: "משקל ק\"ג", waist: "היקף מותן ס\"מ",
+      goalWeight: "משקל יעד", concernText: "תיאור הבעיה", duration: "משך", pattern: "דפוס",
+      meds: "תרופות", history: "רקע רפואי", meals: "ארוחות ביום", window: "חלון אכילה",
+      upf: "מזון אולטרה-מעובד", drinks: "משקאות ממותקים/אלכוהול", sleep: "שעות שינה", stress: "מתח",
+      aerobic: "דקות אירובי/שבוע", strength: "ימי כוח/שבוע", steps: "צעדים/יום", limits: "מגבלות תנועה", goals: "מטרות"
+    };
+    Object.keys(map).forEach(function (k) { if (d[k]) lines.push(map[k] + ": " + d[k]); });
+    if (d.concern && d.concern.length) lines.push("תסמינים שסומנו: " + d.concern.join(", "));
+    if (d.condition && d.condition.length) lines.push("רקע/אבחנות: " + d.condition.join(", "));
+    if (d.flags && d.flags.length) lines.push("דגלים אדומים שסומנו: " + d.flags.join("; "));
+    if (d.height && d.weight) {
+      var bmi = parseFloat(d.weight) / Math.pow(parseFloat(d.height) / 100, 2);
+      if (isFinite(bmi)) lines.push("BMI מחושב: " + bmi.toFixed(1));
+    }
+    lines.push("");
+    lines.push("=== תמצית ההנחיות ===");
+    lines.push(KB_SUMMARY);
+    return lines.join("\n");
+  }
+
+  /* ---------- sample / analyze ---------- */
+  var samplePromise = (window.claude && claude.use) ? claude.use("sample") : Promise.resolve(null);
+  var downloadsPromise = (window.claude && claude.use) ? claude.use("downloads") : Promise.resolve(null);
+  var ctl = null, lastReport = "";
+
+  var ERR = {
+    not_granted: "כדי להפיק ניתוח אישי צריך לאשר לעמוד להשתמש ב-Claude. אפשר לרענן ולאשר, או להשתמש בתמצית ההמלצות שלמעלה.",
+    sampling_disabled: "התכונה אינה זמינה בחשבון הזה. אפשר להשתמש בתמצית ההמלצות שלמעלה.",
+    rate_limited: "יותר מדי בקשות כרגע. נסו שוב בעוד דקה.",
+    refused: "לא ניתן היה להפיק את הניתוח עבור הקלט הזה. נסו לנסח מחדש את תיאור הבעיה והמטרות.",
+    prompt_too_large: "הוזן יותר מדי טקסט. קצרו את התיאור החופשי ונסו שוב.",
+    invalid_request: "משהו בטופס מנע את השליחה. בדקו את השדות ונסו שוב.",
+    upstream_error: "תקלה זמנית בשירות. נסו שוב בעוד רגע."
+  };
+
+  function setBusy(b) {
+    $("analyzeBtn").disabled = b;
+    $("stopBtn").hidden = !b;
+  }
+
+  $("analyzeBtn").addEventListener("click", function () {
+    var d = collect();
+    var filled = TEXT_IDS.filter(function (id) { return d[id]; }).length + d.concern.length;
+    if (filled < 3) {
+      alert("מלאו לפחות כמה שדות בסיס (גיל, גובה, משקל ומה מטריד) לפני הניתוח.");
+      location.hash = "#intake";
+      return;
+    }
+    save(true);
+    var out = $("analysisOut");
+    out.className = "analysis-out";
+    out.innerHTML = '<span class="thinking">מנתח את הנתונים מול ההנחיות<span class="dot"></span><span class="dot"></span><span class="dot"></span></span>';
+
+    samplePromise.then(function (sample) {
+      if (!sample) {
+        out.className = "analysis-out empty";
+        out.textContent = ERR.not_granted;
+        return;
+      }
+      setBusy(true);
+      ctl = new AbortController();
+      var prompt = buildPrompt(d);
+      sample(prompt, {
+        modelTier: "complex",
+        signal: ctl.signal,
+        onText: function (u) { out.textContent = u.text; }
+      }).then(function (res) {
+        lastReport = res.text;
+        out.textContent = res.text + (res.truncated ? "\n\n[הטקסט נקטע — בקשו פחות פרטים בפעם הבאה]" : "");
+        $("exportBtn").hidden = false;
+      }).catch(function (e) {
+        if (e && e.code === "cancelled") {
+          out.textContent = (e.text || "") + "\n\n[הופסק]";
+          return;
+        }
+        out.className = "analysis-out empty";
+        out.textContent = (e && ERR[e.code]) || "אירעה תקלה בהפקת הניתוח. נסו שוב.";
+        if (e && e.text) { out.className = "analysis-out"; out.textContent = e.text + "\n\n[הופסק עקב תקלה]"; }
+      }).finally(function () { setBusy(false); ctl = null; });
+    });
+  });
+
+  $("stopBtn").addEventListener("click", function () { if (ctl) ctl.abort(); });
+
+  /* ---------- export ---------- */
+  $("exportBtn").addEventListener("click", function () {
+    if (!lastReport) return;
+    var d = collect();
+    var md = "# מצפן בריאות — סיכום אישי\n\nתאריך: " + new Date().toLocaleDateString("he-IL") + "\n\n";
+    md += "## נתונים שהוזנו\n\n";
+    TEXT_IDS.forEach(function (id) { if (d[id]) md += "- " + id + ": " + d[id] + "\n"; });
+    if (d.concern.length) md += "- תסמינים: " + d.concern.join(", ") + "\n";
+    if (d.condition.length) md += "- רקע: " + d.condition.join(", ") + "\n";
+    if (d.flags.length) md += "- דגלים אדומים: " + d.flags.join("; ") + "\n";
+    md += "\n## התוכנית האישית\n\n" + lastReport + "\n\n---\nמידע כללי, אינו תחליף לייעוץ רפואי.\n";
+    downloadsPromise.then(function (dl) {
+      if (!dl) { alert("שמירת קובץ אינה זמינה כאן. אפשר להעתיק את הטקסט ידנית."); return; }
+      dl.save({ filename: "health-compass-summary.md", data: md }).catch(function (e) {
+        if (e && e.code === "declined") return;
+        alert("לא ניתן היה לשמור את הקובץ.");
+      });
+    });
+  });
+})();
+</script>
